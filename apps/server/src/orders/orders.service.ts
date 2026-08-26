@@ -71,7 +71,12 @@ export class OrdersService {
 
     const order = await this.prisma.$transaction(async (tx) => {
       const created = await tx.order.create({
-        data: { userId: user!.id, total, status: OrderStatus.PENDING, items: { create: orderItems } },
+        data: {
+          user: { connect: { id: user!.id } },
+          total,
+          status: OrderStatus.PENDING,
+          items: { create: orderItems },
+        },
         include: INCLUDE,
       });
       for (const item of dto.items) {

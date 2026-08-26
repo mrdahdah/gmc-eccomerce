@@ -4,7 +4,8 @@
   "version": "0.1.0",
   "packageManager": "pnpm@9.15.0",
   "scripts": {
-    "dev": "pnpm --parallel --filter @ecommerce/client --filter @ecommerce/admin --filter @ecommerce/server dev",
+    "dev": "pnpm --parallel --filter @ecommerce/web --filter @ecommerce/server dev",
+    "dev:legacy": "pnpm --parallel --filter @ecommerce/client --filter @ecommerce/admin --filter @ecommerce/server dev",
     "build": "pnpm -r build",
     "lint": "pnpm -r lint",
     "format": "prettier --write .",
