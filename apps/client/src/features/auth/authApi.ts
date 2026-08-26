@@ -29,7 +29,7 @@ export const authApi = createApi({
       }),
     }),
     me: build.query<User, void>({
-      query: () => 'auth/me',
+      query: () => 'users/me',
     }),
   }),
 });

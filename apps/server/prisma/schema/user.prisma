@@ -1,0 +1,20 @@
+enum Role {
+  CUSTOMER
+  ADMIN
+}
+
+model User {
+  id            String         @id @default(cuid())
+  firstName     String
+  lastName      String
+  email         String         @unique
+  passwordHash  String
+  role          Role           @default(CUSTOMER)
+  cart          Cart?
+  orders        Order[]
+  notifications Notification[]
+  createdAt     DateTime       @default(now())
+  updatedAt     DateTime       @updatedAt
+
+  @@index([role])
+}

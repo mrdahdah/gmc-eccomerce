@@ -19,9 +19,14 @@ export class AdminController {
     return this.adminService.adminLogin(body.email, body.password);
   }
 
-  // PUBLIC (only for admins to register - use with caution!)
+  // PROTECTED: only an existing ADMIN may mint another admin. (Was public — a
+  // privilege-escalation hole, since adminRegister hard-codes role = ADMIN.)
+  // The first admin comes from the seed script.
+  @ApiBearerAuth()
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles(Role.ADMIN)
   @Post('auth/register')
-  @ApiOperation({ summary: 'Admin register' })
+  @ApiOperation({ summary: 'Register a new admin (admin only)' })
   adminRegister(@Body() body: { firstName: string; lastName: string; email: string; password: string }) {
     return this.adminService.adminRegister(body);
   }

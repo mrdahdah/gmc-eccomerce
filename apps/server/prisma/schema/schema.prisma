@@ -1,0 +1,14 @@
+// Multi-file Prisma schema (one file per module).
+// See https://www.prisma.io/blog/organize-your-prisma-schema-with-multi-file-support
+// Prisma merges every *.prisma file in this folder. Generator + datasource live here;
+// models live beside their module: user / catalog / cart / order / notification.
+
+generator client {
+  provider        = "prisma-client-js"
+  previewFeatures = ["prismaSchemaFolder"]
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
