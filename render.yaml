@@ -1,0 +1,40 @@
+# Render blueprint for the NestJS API (free web service + free Postgres).
+# In Render: New > Blueprint > connect this repo/branch. Set the two sync:false vars
+# (WEB_URL = your Vercel URL, CLOUDINARY_URL = cloudinary://<key>:<secret>@dtqc0casp).
+services:
+  - type: web
+    name: gmc-eccomerce-api
+    runtime: node
+    region: frankfurt
+    plan: free
+    # Migrations + seed run at build time (Render free has no preDeploy hook). Seed is idempotent.
+    buildCommand: >-
+      corepack enable &&
+      pnpm install --no-frozen-lockfile ;
+      pnpm rebuild ;
+      pnpm --filter @ecommerce/server prisma:generate &&
+      pnpm --filter @ecommerce/server build &&
+      pnpm --filter @ecommerce/server prisma:deploy &&
+      pnpm --filter @ecommerce/server prisma:seed
+    startCommand: pnpm --filter @ecommerce/server start:prod
+    healthCheckPath: /api/health
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: JWT_SECRET
+        generateValue: true
+      - key: DATABASE_URL
+        fromDatabase:
+          name: gmc-eccomerce-db
+          property: connectionString
+      # Set in the dashboard (Vercel origin) so CORS lets the storefront in.
+      - key: WEB_URL
+        sync: false
+      # Set in the dashboard — never commit: cloudinary://<key>:<secret>@dtqc0casp
+      - key: CLOUDINARY_URL
+        sync: false
+
+databases:
+  - name: gmc-eccomerce-db
+    plan: free
+    region: frankfurt
