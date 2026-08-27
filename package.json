@@ -13,7 +13,7 @@
     "db:migrate": "pnpm --filter @ecommerce/server prisma:migrate",
     "db:seed": "pnpm --filter @ecommerce/server prisma:seed",
     "db:studio": "pnpm --filter @ecommerce/server prisma:studio",
-    "prepare": "husky",
+    "prepare": "husky || true",
     "lint-staged": { "*.{ts,tsx,js,jsx}": "eslint --fix", "*.{md,json,css}": "prettier --write" }
   },
   "devDependencies": {
