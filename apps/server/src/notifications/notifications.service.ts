@@ -2,12 +2,15 @@ import { Injectable, NotFoundException } from '@nestjs/common';
 import { NotificationType } from '@prisma/client';
 import { PrismaService } from '../prisma/prisma.service';
 import { NotificationsGateway } from './notifications.gateway';
+import { PushService } from './push.service';
 
 interface CreateNotificationInput {
   type: NotificationType;
   title: string;
   message: string;
   orderId?: string;
+  /** Where a click on the OS-level notification should land. */
+  url?: string;
 }
 
 @Injectable()
@@ -15,9 +18,17 @@ export class NotificationsService {
   constructor(
     private readonly prisma: PrismaService,
     private readonly gateway: NotificationsGateway,
+    private readonly push: PushService,
   ) {}
 
-  /** Persist a notification and push it to the owner's live sockets. */
+  /**
+   * Persist a notification, fan it out to the owner's live sockets, and mirror
+   * it to their subscribed browsers over web push.
+   *
+   * The socket delivery covers open tabs; push covers everything else. Push is
+   * fire-and-forget on purpose — a dead subscription must never fail the order
+   * update or stock change that triggered the notification.
+   */
   async create(userId: string, input: CreateNotificationInput) {
     const notification = await this.prisma.notification.create({
       data: {
@@ -29,6 +40,17 @@ export class NotificationsService {
       },
     });
     this.gateway.emitToUser(userId, 'notification.created', notification);
+
+    void this.push
+      .sendToUser(userId, {
+        title: input.title,
+        message: input.message,
+        url: input.url ?? (input.orderId ? `/orders/${input.orderId}` : '/notifications'),
+      })
+      .catch(() => {
+        /* Already logged inside PushService; never surface it to the caller. */
+      });
+
     return notification;
   }
 

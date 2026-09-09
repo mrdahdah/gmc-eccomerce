@@ -1,10 +1,11 @@
 import { Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { JwtModule } from '@nestjs/jwt';
-import { NotificationsController } from './notifications.controller';
+import { NotificationsController, PushPublicController } from './notifications.controller';
 import { NotificationsGateway } from './notifications.gateway';
 import { NotificationsListener } from './notifications.listener';
 import { NotificationsService } from './notifications.service';
+import { PushService } from './push.service';
 
 @Module({
   imports: [
@@ -18,8 +19,8 @@ import { NotificationsService } from './notifications.service';
       }),
     }),
   ],
-  controllers: [NotificationsController],
-  providers: [NotificationsGateway, NotificationsService, NotificationsListener],
-  exports: [NotificationsService],
+  controllers: [PushPublicController, NotificationsController],
+  providers: [NotificationsGateway, NotificationsService, NotificationsListener, PushService],
+  exports: [NotificationsService, PushService],
 })
 export class NotificationsModule {}

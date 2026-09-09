@@ -25,6 +25,7 @@ export interface SubscriptionInput {
 export class PushService {
   private readonly logger = new Logger(PushService.name);
   private readonly enabled: boolean;
+  private readonly vapidPublicKey: string | null;
 
   constructor(
     private readonly prisma: PrismaService,
@@ -35,6 +36,7 @@ export class PushService {
     const subject = config.get<string>('VAPID_SUBJECT') ?? 'mailto:admin@example.com';
 
     this.enabled = Boolean(publicKey && privateKey);
+    this.vapidPublicKey = this.enabled ? publicKey! : null;
     if (this.enabled) {
       webpush.setVapidDetails(subject, publicKey!, privateKey!);
     } else {
@@ -45,7 +47,7 @@ export class PushService {
   }
 
   get publicKey(): string | null {
-    return this.enabled ? (process.env.VAPID_PUBLIC_KEY ?? null) : null;
+    return this.vapidPublicKey;
   }
 
   get isEnabled(): boolean {

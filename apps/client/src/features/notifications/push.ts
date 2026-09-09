@@ -1,5 +1,6 @@
 // apps/client/src/features/notifications/push.ts
 // Browser-side plumbing for Web Push over VAPID.
+import { swRegistration } from '../pwa/serviceWorker';
 
 const API_URL = import.meta.env.VITE_API_URL ?? 'http://localhost:3000/api';
 
@@ -23,14 +24,17 @@ function urlBase64ToUint8Array(base64: string): Uint8Array {
   return Uint8Array.from([...raw].map((char) => char.charCodeAt(0)));
 }
 
-export async function registerServiceWorker(): Promise<ServiceWorkerRegistration | null> {
+/**
+ * The registration owned by features/pwa/serviceWorker.ts. Kept as a function
+ * so callers do not have to know where registration happens.
+ */
+export async function getRegistration(): Promise<ServiceWorkerRegistration | null> {
   if (!isPushSupported()) return null;
-  return navigator.serviceWorker.register('/sw.js');
+  return (await swRegistration) ?? (await navigator.serviceWorker.getRegistration()) ?? null;
 }
 
 export async function getSubscription(): Promise<PushSubscription | null> {
-  if (!isPushSupported()) return null;
-  const registration = await navigator.serviceWorker.getRegistration();
+  const registration = await getRegistration();
   return (await registration?.pushManager.getSubscription()) ?? null;
 }
 
@@ -63,7 +67,7 @@ export async function subscribe(token: string): Promise<void> {
   const publicKey = await fetchPublicKey();
   if (!publicKey) throw new Error('Push is not configured on the server (missing VAPID keys).');
 
-  const registration = (await navigator.serviceWorker.getRegistration()) ?? (await registerServiceWorker());
+  const registration = await getRegistration();
   if (!registration) throw new Error('Could not register the service worker.');
   await navigator.serviceWorker.ready;
 

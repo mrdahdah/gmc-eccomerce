@@ -1,0 +1,23 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    {
+      "name": "gmc-server",
+      "runtimeExecutable": "pnpm",
+      "runtimeArgs": ["--filter", "@ecommerce/server", "dev"],
+      "port": 3000
+    },
+    {
+      "name": "gmc-client",
+      "runtimeExecutable": "pnpm",
+      "runtimeArgs": ["--filter", "@ecommerce/client", "dev"],
+      "port": 5173
+    },
+    {
+      "name": "gmc-admin",
+      "runtimeExecutable": "pnpm",
+      "runtimeArgs": ["--filter", "@ecommerce/admin", "dev"],
+      "port": 5174
+    }
+  ]
+}

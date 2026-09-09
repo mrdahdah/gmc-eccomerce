@@ -1,5 +1,7 @@
 node_modules/
 dist/
+# vite-plugin-pwa's dev-mode service worker output
+dev-dist/
 *.tsbuildinfo
 .env
 .env.*

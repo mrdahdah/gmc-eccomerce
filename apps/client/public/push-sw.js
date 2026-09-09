@@ -4,6 +4,12 @@
 self.addEventListener('install', () => self.skipWaiting());
 self.addEventListener('activate', (event) => event.waitUntil(self.clients.claim()));
 
+// Sent by the "a new version is ready" banner (features/pwa/usePwa.ts) when a
+// worker does end up waiting behind an older one.
+self.addEventListener('message', (event) => {
+  if (event.data?.type === 'SKIP_WAITING') self.skipWaiting();
+});
+
 self.addEventListener('push', (event) => {
   // A push with no body still deserves a visible notification, otherwise Chrome
   // shows its own "This site has been updated in the background" placeholder.

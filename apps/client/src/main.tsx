@@ -7,14 +7,12 @@ import { googleProviderClientId } from './features/auth/googleConfig';
 import { store } from './store';
 import { App } from './App';
 import { ToastProvider } from './components/Toast';
-import { registerServiceWorker } from './features/notifications/push';
 import './styles.css';
 
-// Registered up front so an already-subscribed browser keeps receiving push
-// even before the user visits the notifications page.
-registerServiceWorker().catch(() => {
-  /* Push is optional; an unavailable service worker must not break the app. */
-});
+// Side-effect import: registers the service worker up front, so an
+// already-subscribed browser keeps receiving push and the offline shell is
+// cached before the user navigates anywhere.
+import './features/pwa/serviceWorker';
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>

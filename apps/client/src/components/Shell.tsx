@@ -3,6 +3,7 @@ import { authApi } from '../features/auth/authApi';
 import { logout } from '../features/auth/authSlice';
 import { ToastHost } from '../features/notifications/ToastHost';
 import { useNotificationsSocket } from '../features/notifications/useNotificationsSocket';
+import { PwaBanners } from '../features/pwa/PwaBanners';
 import { useAppDispatch, useAppSelector } from '../store/hooks';
 import { UnauthorizedView } from './auth/UnauthorizedView';
 import { CategoryNav } from './layout/CategoryNav';
@@ -50,6 +51,7 @@ export function Shell({ children }: { children: React.ReactNode }) {
 
       <Footer />
       <ToastHost />
+      <PwaBanners />
     </div>
   );
 }
