@@ -9,7 +9,7 @@ import {
   useUpdateProductMutation,
 } from '../features/catalog/catalogApi';
 import type { Product } from '../features/catalog/types';
-import { Banner, Button, Field, Input, Modal, Select, Textarea, Toggle, errorMessage } from '../components/ui';
+import { Banner, Button, errorMessage, Field, Input, Modal, Select, TableScroll, Textarea, Toggle } from '../components/ui';
 import { useToast } from '../components/Toast';
 
 interface FormState {
@@ -194,90 +194,92 @@ export function Products() {
           </p>
         </div>
       ) : (
-        <table>
-          <thead>
-            <tr>
-              <th>Product</th>
-              <th>Category</th>
-              <th>Price</th>
-              <th>Stock</th>
-              <th>Status</th>
-              <th>Actions</th>
-            </tr>
-          </thead>
-          <tbody>
-            {visible.map((product) => (
-              <tr key={product.id}>
-                <td>
-                  <div className="flex items-center gap-3">
-                    {product.imageUrl ? (
-                      <img
-                        src={product.imageUrl}
-                        alt=""
-                        className="h-10 w-10 shrink-0 rounded-md border border-admin-border object-cover"
-                      />
-                    ) : (
-                      <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-md border border-admin-border bg-admin-card text-admin-text/40">
-                        <Package size={16} />
-                      </span>
-                    )}
-                    <div className="min-w-0">
-                      <div className="truncate font-semibold">{product.name}</div>
-                      <div className="font-mono text-xs text-admin-text/55">{product.slug}</div>
-                    </div>
-                  </div>
-                </td>
-                <td>
-                  <span className="whitespace-nowrap">
-                    {product.category.icon} {product.category.name}
-                  </span>
-                </td>
-                <td>
-                  <div className="whitespace-nowrap font-semibold">{money(product.price)}</div>
-                  {product.compareAtPrice !== null && (
-                    <div className="text-xs text-admin-text/50">
-                      <s>{money(product.compareAtPrice)}</s>{' '}
-                      <span className="font-bold text-primary">-{product.discountPercent}%</span>
-                    </div>
-                  )}
-                </td>
-                <td>
-                  <span className={product.stock === 0 ? 'font-bold text-danger' : ''}>{product.stock}</span>
-                </td>
-                <td>
-                  <div className="flex flex-wrap gap-1">
-                    <span
-                      className={`rounded-full px-2.5 py-1 text-xs font-bold ${
-                        product.isActive ? 'bg-emerald-100 text-emerald-800' : 'bg-zinc-200 text-zinc-600'
-                      }`}
-                    >
-                      {product.isActive ? 'Live' : 'Hidden'}
-                    </span>
-                    {product.isFeatured && (
-                      <span className="rounded-full bg-amber-100 px-2.5 py-1 text-xs font-bold text-amber-800">
-                        Featured
-                      </span>
-                    )}
-                  </div>
-                </td>
-                <td>
-                  <div className="flex gap-2">
-                    <button
-                      onClick={() => openEdit(product)}
-                      className="!bg-admin-card !text-admin-text hover:!bg-admin-border"
-                      aria-label={`Edit ${product.name}`}
-                    >
-                      <Pencil size={13} />
-                    </button>
-                    <button onClick={() => remove(product)} aria-label={`Delete ${product.name}`}>
-                      <Trash2 size={13} />
-                    </button>
-                  </div>
-                </td>
+        <TableScroll>
+          <table>
+            <thead>
+              <tr>
+                <th>Product</th>
+                <th>Category</th>
+                <th>Price</th>
+                <th>Stock</th>
+                <th>Status</th>
+                <th>Actions</th>
               </tr>
-            ))}
-          </tbody>
-        </table>
+            </thead>
+            <tbody>
+              {visible.map((product) => (
+                <tr key={product.id}>
+                  <td>
+                    <div className="flex items-center gap-3">
+                      {product.imageUrl ? (
+                        <img
+                          src={product.imageUrl}
+                          alt=""
+                          className="h-10 w-10 shrink-0 rounded-md border border-admin-border object-cover"
+                        />
+                      ) : (
+                        <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-md border border-admin-border bg-admin-card text-admin-text/40">
+                          <Package size={16} />
+                        </span>
+                      )}
+                      <div className="min-w-0">
+                        <div className="truncate font-semibold">{product.name}</div>
+                        <div className="font-mono text-xs text-admin-text/55">{product.slug}</div>
+                      </div>
+                    </div>
+                  </td>
+                  <td>
+                    <span className="whitespace-nowrap">
+                      {product.category.icon} {product.category.name}
+                    </span>
+                  </td>
+                  <td>
+                    <div className="whitespace-nowrap font-semibold">{money(product.price)}</div>
+                    {product.compareAtPrice !== null && (
+                      <div className="text-xs text-admin-text/50">
+                        <s>{money(product.compareAtPrice)}</s>{' '}
+                        <span className="font-bold text-primary">-{product.discountPercent}%</span>
+                      </div>
+                    )}
+                  </td>
+                  <td>
+                    <span className={product.stock === 0 ? 'font-bold text-danger' : ''}>{product.stock}</span>
+                  </td>
+                  <td>
+                    <div className="flex flex-wrap gap-1">
+                      <span
+                        className={`rounded-full px-2.5 py-1 text-xs font-bold ${
+                          product.isActive ? 'bg-emerald-100 text-emerald-800' : 'bg-zinc-200 text-zinc-600'
+                        }`}
+                      >
+                        {product.isActive ? 'Live' : 'Hidden'}
+                      </span>
+                      {product.isFeatured && (
+                        <span className="rounded-full bg-amber-100 px-2.5 py-1 text-xs font-bold text-amber-800">
+                          Featured
+                        </span>
+                      )}
+                    </div>
+                  </td>
+                  <td>
+                    <div className="flex gap-2">
+                      <button
+                        onClick={() => openEdit(product)}
+                        className="!bg-admin-card !text-admin-text hover:!bg-admin-border"
+                        aria-label={`Edit ${product.name}`}
+                      >
+                        <Pencil size={13} />
+                      </button>
+                      <button onClick={() => remove(product)} aria-label={`Delete ${product.name}`}>
+                        <Trash2 size={13} />
+                      </button>
+                    </div>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </TableScroll>
       )}
 
       {isOpen && (

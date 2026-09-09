@@ -8,7 +8,7 @@ import {
   useUpdateCategoryMutation,
 } from '../features/catalog/catalogApi';
 import type { Category } from '../features/catalog/types';
-import { Banner, Button, Field, Input, Modal, Textarea, Toggle, errorMessage } from '../components/ui';
+import { Banner, Button, errorMessage, Field, Input, Modal, TableScroll, Textarea, Toggle } from '../components/ui';
 import { useToast } from '../components/Toast';
 
 interface FormState {
@@ -138,61 +138,63 @@ export function Categories() {
           </p>
         </div>
       ) : (
-        <table>
-          <thead>
-            <tr>
-              <th>Category</th>
-              <th>Slug</th>
-              <th>Products</th>
-              <th>Order</th>
-              <th>Status</th>
-              <th>Actions</th>
-            </tr>
-          </thead>
-          <tbody>
-            {categories.map((category) => (
-              <tr key={category.id}>
-                <td>
-                  <div className="flex items-center gap-2.5">
-                    <span className="text-lg leading-none">{category.icon || '📁'}</span>
-                    <div>
-                      <div className="font-semibold">{category.name}</div>
-                      {category.description && (
-                        <div className="max-w-xs truncate text-xs text-admin-text/55">{category.description}</div>
-                      )}
-                    </div>
-                  </div>
-                </td>
-                <td className="font-mono text-xs text-admin-text/70">{category.slug}</td>
-                <td>{category.productCount}</td>
-                <td>{category.sortOrder}</td>
-                <td>
-                  <span
-                    className={`rounded-full px-2.5 py-1 text-xs font-bold ${
-                      category.isActive ? 'bg-emerald-100 text-emerald-800' : 'bg-zinc-200 text-zinc-600'
-                    }`}
-                  >
-                    {category.isActive ? 'Visible' : 'Hidden'}
-                  </span>
-                </td>
-                <td>
-                  <div className="flex gap-2">
-                    <button
-                      onClick={() => openEdit(category)}
-                      className="!bg-admin-card !text-admin-text hover:!bg-admin-border"
-                      aria-label={`Edit ${category.name}`}
-                    >
-                      <Pencil size={13} />
-                    </button>
-                    <button onClick={() => remove(category)} aria-label={`Delete ${category.name}`}>
-                      <Trash2 size={13} />
-                    </button>
-                  </div>
-                </td>
+        <TableScroll>
+          <table>
+            <thead>
+              <tr>
+                <th>Category</th>
+                <th>Slug</th>
+                <th>Products</th>
+                <th>Order</th>
+                <th>Status</th>
+                <th>Actions</th>
               </tr>
-            ))}
-          </tbody>
-        </table>
+            </thead>
+            <tbody>
+              {categories.map((category) => (
+                <tr key={category.id}>
+                  <td>
+                    <div className="flex items-center gap-2.5">
+                      <span className="text-lg leading-none">{category.icon || '📁'}</span>
+                      <div>
+                        <div className="font-semibold">{category.name}</div>
+                        {category.description && (
+                          <div className="max-w-xs truncate text-xs text-admin-text/55">{category.description}</div>
+                        )}
+                      </div>
+                    </div>
+                  </td>
+                  <td className="font-mono text-xs text-admin-text/70">{category.slug}</td>
+                  <td>{category.productCount}</td>
+                  <td>{category.sortOrder}</td>
+                  <td>
+                    <span
+                      className={`rounded-full px-2.5 py-1 text-xs font-bold ${
+                        category.isActive ? 'bg-emerald-100 text-emerald-800' : 'bg-zinc-200 text-zinc-600'
+                      }`}
+                    >
+                      {category.isActive ? 'Visible' : 'Hidden'}
+                    </span>
+                  </td>
+                  <td>
+                    <div className="flex gap-2">
+                      <button
+                        onClick={() => openEdit(category)}
+                        className="!bg-admin-card !text-admin-text hover:!bg-admin-border"
+                        aria-label={`Edit ${category.name}`}
+                      >
+                        <Pencil size={13} />
+                      </button>
+                      <button onClick={() => remove(category)} aria-label={`Delete ${category.name}`}>
+                        <Trash2 size={13} />
+                      </button>
+                    </div>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </TableScroll>
       )}
 
       {isOpen && (

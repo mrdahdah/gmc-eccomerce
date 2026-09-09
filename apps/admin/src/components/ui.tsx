@@ -160,3 +160,25 @@ export function errorMessage(error: unknown, fallback: string): string {
   if (Array.isArray(message)) return message.join(', ');
   return message ?? fallback;
 }
+
+/**
+ * Horizontal scroll container for a data table.
+ *
+ * The admin tables need ~900px to lay out their columns; on a phone or a
+ * narrow split view that used to push the whole document sideways, taking the
+ * sidebar and header with it. Scrolling the table on its own keeps the page
+ * itself the width of the screen.
+ */
+export function TableScroll({ children }: { children: ReactNode }) {
+  return (
+    <div
+      // Focusable so the region is reachable (and scrollable) by keyboard.
+      tabIndex={0}
+      role="region"
+      aria-label="Table, scrolls horizontally"
+      className="-mx-6 overflow-x-auto px-6 sm:mx-0 sm:px-0"
+    >
+      <div className="min-w-[820px]">{children}</div>
+    </div>
+  );
+}

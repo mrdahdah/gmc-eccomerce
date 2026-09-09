@@ -9,7 +9,7 @@ import {
   type AdminOrder,
   type OrderStatus,
 } from '../features/orders/ordersApi';
-import { Banner, errorMessage } from '../components/ui';
+import { Banner, errorMessage, TableScroll } from '../components/ui';
 import { useToast } from '../components/Toast';
 
 const PAGE_SIZE = 20;
@@ -210,24 +210,26 @@ export function Orders() {
         </div>
       ) : (
         <>
-          <table>
-            <thead>
-              <tr>
-                <th>Order</th>
-                <th>Customer</th>
-                <th>Placed</th>
-                <th>Items</th>
-                <th>Total</th>
-                <th>Status</th>
-                <th>Actions</th>
-              </tr>
-            </thead>
-            <tbody>
-              {orders.map((order) => (
-                <OrderRow key={order.id} order={order} />
-              ))}
-            </tbody>
-          </table>
+          <TableScroll>
+            <table>
+              <thead>
+                <tr>
+                  <th>Order</th>
+                  <th>Customer</th>
+                  <th>Placed</th>
+                  <th>Items</th>
+                  <th>Total</th>
+                  <th>Status</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody>
+                {orders.map((order) => (
+                  <OrderRow key={order.id} order={order} />
+                ))}
+              </tbody>
+            </table>
+          </TableScroll>
 
           {pageCount > 1 && (
             <div className="mt-4 flex items-center justify-between text-sm">

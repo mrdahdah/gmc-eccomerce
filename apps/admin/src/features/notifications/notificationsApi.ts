@@ -23,6 +23,16 @@ export const notificationsApi = createApi({
       query: () => ({ url: 'notifications/read-all', method: 'PATCH' }),
       invalidatesTags: ['Notifications', 'UnreadCount'],
     }),
+    /** Whether the server has VAPID keys, so the composer can say so up front. */
+    getPushStatus: build.query<{ publicKey: string | null; enabled: boolean }, void>({
+      query: () => 'notifications/vapid-public-key',
+    }),
+    broadcast: build.mutation<
+      { sent: number; failed: number; pruned: number },
+      { title: string; message: string; url?: string }
+    >({
+      query: (body) => ({ url: 'notifications/broadcast', method: 'POST', body }),
+    }),
   }),
 });
 
@@ -31,4 +41,6 @@ export const {
   useGetUnreadCountQuery,
   useMarkReadMutation,
   useMarkAllReadMutation,
+  useGetPushStatusQuery,
+  useBroadcastMutation,
 } = notificationsApi;

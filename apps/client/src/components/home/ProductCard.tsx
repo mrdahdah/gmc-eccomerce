@@ -48,7 +48,7 @@ export function ProductCard({ product }: { product: Product }) {
   return (
     <Link
       to={`/products/${slug}`}
-      className="group flex flex-col rounded-lg border border-[#c8c4b9] bg-white p-4 transition hover:shadow-lg"
+      className="group flex flex-col rounded-lg border border-[#c8c4b9] bg-white p-3 transition hover:shadow-lg sm:p-4"
     >
       <div className="relative mb-4 overflow-hidden rounded-md bg-[#f5f1e8]">
         {discountPercent !== null && (
@@ -66,10 +66,10 @@ export function ProductCard({ product }: { product: Product }) {
             src={imageUrl}
             alt={name}
             loading="lazy"
-            className="h-48 w-full object-cover transition duration-300 group-hover:scale-105"
+            className="h-36 w-full object-cover transition duration-300 group-hover:scale-105 sm:h-48"
           />
         ) : (
-          <div className="flex h-48 w-full items-center justify-center text-sm text-gray-400">No image</div>
+          <div className="flex h-36 w-full items-center justify-center text-sm text-gray-400 sm:h-48">No image</div>
         )}
       </div>
 
@@ -102,8 +102,8 @@ export function ProductCard({ product }: { product: Product }) {
 /** Matches the card footprint so grids do not jump while data loads. */
 export function ProductCardSkeleton() {
   return (
-    <div className="rounded-lg border border-[#c8c4b9] bg-white p-4">
-      <div className="mb-4 h-48 w-full animate-pulse rounded-md bg-[#e8e4da]" />
+    <div className="rounded-lg border border-[#c8c4b9] bg-white p-3 sm:p-4">
+      <div className="mb-4 h-36 w-full animate-pulse rounded-md bg-[#e8e4da] sm:h-48" />
       <div className="mb-2 h-4 w-3/4 animate-pulse rounded bg-[#e8e4da]" />
       <div className="mb-4 h-4 w-1/3 animate-pulse rounded bg-[#e8e4da]" />
       <div className="h-9 w-full animate-pulse rounded-md bg-[#e8e4da]" />

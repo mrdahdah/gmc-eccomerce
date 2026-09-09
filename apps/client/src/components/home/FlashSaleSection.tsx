@@ -50,7 +50,7 @@ export function FlashSaleSection() {
         <h2 className="text-2xl font-bold">⚡ {flashSale?.headline ?? 'Flash Sale'}</h2>
         {flashSale?.endsAt && <Countdown endsAt={flashSale.endsAt} />}
       </div>
-      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
+      <div className="grid grid-cols-2 gap-3 sm:gap-4 lg:grid-cols-4">
         {isLoading
           ? Array.from({ length: 4 }, (_, index) => <ProductCardSkeleton key={index} />)
           : products.map((product) => <ProductCard key={product.id} product={product} />)}

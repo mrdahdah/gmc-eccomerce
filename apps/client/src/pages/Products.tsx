@@ -118,7 +118,7 @@ export function Products() {
       </div>
 
       {isLoading ? (
-        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
+        <div className="grid grid-cols-2 gap-3 sm:gap-4 lg:grid-cols-4">
           {Array.from({ length: 8 }, (_, index) => (
             <ProductCardSkeleton key={index} />
           ))}
@@ -149,7 +149,7 @@ export function Products() {
           </p>
         </div>
       ) : (
-        <div className={`grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4 ${isFetching ? 'opacity-60' : ''}`}>
+        <div className={`grid grid-cols-2 gap-3 sm:gap-4 lg:grid-cols-4 ${isFetching ? 'opacity-60' : ''}`}>
           {products.map((product) => (
             <ProductCard key={product.id} product={product} />
           ))}

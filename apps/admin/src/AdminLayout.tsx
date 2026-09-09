@@ -1,5 +1,5 @@
 // apps/admin/src/AdminLayout.tsx
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useAppDispatch, useAppSelector } from './store/hooks';
 import { logout } from './features/auth/authSlice';
 import { authApi } from './features/auth/authApi';
@@ -52,6 +52,15 @@ export function AdminLayout() {
 
   const isActive = (path: string) => location.pathname === path;
 
+  useEffect(() => {
+    if (!mobileMenuOpen) return;
+    const onKeyDown = (event: KeyboardEvent) => {
+      if (event.key === 'Escape') setMobileMenuOpen(false);
+    };
+    window.addEventListener('keydown', onKeyDown);
+    return () => window.removeEventListener('keydown', onKeyDown);
+  }, [mobileMenuOpen]);
+
   const navLinkClasses = (path: string) => `
     flex items-center gap-3 px-3.5 py-2.5 rounded-lg text-sm font-medium transition-all duration-200
     ${isActive(path) 
@@ -62,7 +71,7 @@ export function AdminLayout() {
   return (
     <div className="min-h-screen bg-admin-bg flex flex-col lg:flex-row font-sans text-admin-text">
       {/* Top Mobile Bar */}
-      <header className="lg:hidden flex items-center justify-between bg-[#20231f] text-white px-4 py-3 border-b border-white/10 sticky top-0 z-5">
+      <header className="lg:hidden flex items-center justify-between bg-[#20231f] text-white px-4 py-3 border-b border-white/10 sticky top-0 z-20">
         <div className="flex items-center gap-2">
           <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-primary text-white shadow-md">
             <Gamepad2 size={18} />
@@ -80,11 +89,20 @@ export function AdminLayout() {
         </button>
       </header>
 
+      {/* Scrim: the drawer sits above the content, so tapping away must close it. */}
+      {mobileMenuOpen && (
+        <div
+          onClick={() => setMobileMenuOpen(false)}
+          aria-hidden="true"
+          className="fixed inset-0 z-30 bg-black/50 lg:hidden"
+        />
+      )}
+
       {/* Sidebar Navigation */}
       <aside className={`
-        fixed lg:sticky top-0 h-screen w-64 shrink-0 z-40
+        fixed lg:sticky top-0 h-screen w-64 shrink-0 z-40 overflow-y-auto
         bg-[#20231f] text-white p-6 flex flex-col justify-between
-        transition-transform duration-300 ease-in-out
+        transition-transform duration-300 ease-in-out motion-reduce:transition-none
         ${mobileMenuOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'}
       `}>
         <div>

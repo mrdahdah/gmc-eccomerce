@@ -8,6 +8,7 @@ import {
 } from '../features/storefront/storefrontApi';
 import { Button, Field, Input, Toggle, errorMessage } from '../components/ui';
 import { useToast } from '../components/Toast';
+import { PushBroadcast } from '../features/notifications/PushBroadcast';
 
 /** `datetime-local` needs `YYYY-MM-DDTHH:mm` in local time, not an ISO string. */
 function toLocalInput(iso: string | null): string {
@@ -55,7 +56,8 @@ export function Marketing() {
         <p className="eyebrow">Admin / Marketing</p>
         <h1 className="font-display text-2xl font-extrabold">Marketing</h1>
         <p className="mt-1 text-sm text-admin-text/70">
-          The flash sale strip and the newsletter list that the storefront feeds into.
+          The flash sale strip, push announcements, and the newsletter list that the
+          storefront feeds into.
         </p>
       </div>
 
@@ -143,6 +145,8 @@ export function Marketing() {
             </ul>
           )}
         </div>
+
+        <PushBroadcast />
       </div>
     </section>
   );
