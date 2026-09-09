@@ -22,6 +22,10 @@ import './styles.css';
 import { App } from './App';
 import { ToastProvider } from './components/Toast';
 
+// Side-effect import: registers the service worker that receives push, so an
+// admin who already opted in keeps getting low-stock alerts from any page.
+import './features/pwa/serviceWorker';
+
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
     <GoogleOAuthProvider clientId={googleProviderClientId}>

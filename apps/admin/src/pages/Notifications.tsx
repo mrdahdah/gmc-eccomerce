@@ -4,6 +4,7 @@ import {
   useMarkAllReadMutation,
   useMarkReadMutation,
 } from '../features/notifications/notificationsApi';
+import { PushToggle } from '../features/notifications/PushToggle';
 
 export function Notifications() {
   const [take, setTake] = useState(20);
@@ -25,6 +26,8 @@ export function Notifications() {
           Mark all read
         </button>
       </div>
+
+      <PushToggle />
 
       {!page?.items.length && !isFetching && (
         <p className="mt-6 text-sm text-gray-500">No notifications yet.</p>
