@@ -13,6 +13,10 @@ self.addEventListener('message', (event) => {
   if (event.data?.type === 'SKIP_WAITING') self.skipWaiting();
 });
 
+// App paths ('/notifications') are relative to wherever the admin is mounted
+// (the origin root in dev, /admin/ in the combined deployment).
+const inScope = (path) => new URL(String(path).replace(/^\//, ''), self.registration.scope).href;
+
 self.addEventListener('push', (event) => {
   // A push with no body still deserves a visible notification, otherwise Chrome
   // shows its own "This site has been updated in the background" placeholder.
@@ -28,9 +32,9 @@ self.addEventListener('push', (event) => {
   event.waitUntil(
     self.registration.showNotification(payload.title, {
       body: payload.message,
-      icon: '/icon-192.png',
-      badge: '/icon-192.png',
-      data: { url: payload.url || '/' },
+      icon: inScope('icon-192.png'),
+      badge: inScope('icon-192.png'),
+      data: { url: inScope(payload.url || '/') },
       tag: 'gmc-admin-notification',
       renotify: true,
     }),
@@ -39,13 +43,14 @@ self.addEventListener('push', (event) => {
 
 self.addEventListener('notificationclick', (event) => {
   event.notification.close();
-  const target = event.notification.data?.url || '/';
+  const target = event.notification.data?.url || inScope('/');
 
   event.waitUntil(
     self.clients.matchAll({ type: 'window', includeUncontrolled: true }).then((clientList) => {
-      // Focus an existing tab on this origin rather than opening a duplicate.
+      // Focus an existing admin tab rather than opening a duplicate. The
+      // storefront shares the origin, so never hijack one of its tabs.
       for (const client of clientList) {
-        if ('focus' in client) {
+        if (client.url.startsWith(self.registration.scope) && 'focus' in client) {
           client.navigate(target);
           return client.focus();
         }

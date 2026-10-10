@@ -30,7 +30,7 @@ createRoot(document.getElementById('root')!).render(
   <StrictMode>
     <GoogleOAuthProvider clientId={googleProviderClientId}>
       <Provider store={store}>
-        <BrowserRouter>
+        <BrowserRouter basename={import.meta.env.BASE_URL.replace(/\/$/, '')}>
           <ToastProvider>
             <App />
           </ToastProvider>

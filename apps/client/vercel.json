@@ -1,15 +1,17 @@
 {
   "$schema": "https://openapi.vercel.sh/vercel.json",
   "framework": "vite",
-  "buildCommand": "pnpm run build",
+  "buildCommand": "pnpm run build && ADMIN_BASE=/admin/ pnpm --dir ../admin run build && rm -rf dist/admin && cp -r ../admin/dist dist/admin",
   "outputDirectory": "dist",
+  "redirects": [{ "source": "/admin", "destination": "/admin/", "permanent": false }],
   "rewrites": [
     { "source": "/api/:path*", "destination": "https://gmc-eccomerce-api-cmpos.vercel.app/api/:path*" },
+    { "source": "/admin/:path*", "destination": "/admin/index.html" },
     { "source": "/(.*)", "destination": "/index.html" }
   ],
   "headers": [
     {
-      "source": "/(sw.js|push-sw.js|manifest.webmanifest)",
+      "source": "/(sw.js|push-sw.js|manifest.webmanifest|admin/sw.js|admin/push-sw.js|admin/manifest.webmanifest)",
       "headers": [{ "key": "Cache-Control", "value": "public, max-age=0, must-revalidate" }]
     }
   ]

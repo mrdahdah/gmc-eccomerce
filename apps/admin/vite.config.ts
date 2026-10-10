@@ -3,7 +3,12 @@ import react from '@vitejs/plugin-react';
 import tailwindcss from '@tailwindcss/vite';
 import { VitePWA } from 'vite-plugin-pwa';
 
+// Served from the root in dev, but from /admin/ when bundled into the storefront
+// deployment (ADMIN_BASE=/admin/). Everything path-like below derives from it.
+const base = process.env.ADMIN_BASE ?? '/';
+
 export default defineConfig({
+  base,
   plugins: [
     react(),
     tailwindcss(),
@@ -19,17 +24,17 @@ export default defineConfig({
         name: 'GoMyCode Games Admin',
         short_name: 'GMC Admin',
         description: 'Operations control for the GoMyCode Games storefront.',
-        start_url: '/',
-        scope: '/',
+        start_url: base,
+        scope: base,
         display: 'standalone',
         theme_color: '#20231f',
         background_color: '#f2efe8',
-        icons: [{ src: '/icon-192.png', sizes: '192x192', type: 'image/png' }],
+        icons: [{ src: `${base}icon-192.png`, sizes: '192x192', type: 'image/png' }],
       },
       workbox: {
-        importScripts: ['/push-sw.js'],
+        importScripts: [`${base}push-sw.js`],
         globPatterns: ['**/*.{js,css,html,png}'],
-        navigateFallback: '/index.html',
+        navigateFallback: `${base}index.html`,
         // No runtimeCaching at all, so every /api read goes to the network.
         navigateFallbackDenylist: [/^\/api\//],
         cleanupOutdatedCaches: true,

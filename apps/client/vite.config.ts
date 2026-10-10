@@ -48,7 +48,8 @@ export default defineConfig({
         // The SPA shell answers every navigation; API calls must never be
         // served from it, or an offline tab would render HTML into fetch().
         navigateFallback: '/index.html',
-        navigateFallbackDenylist: [/^\/api\//],
+        // /admin/ is a separate app with its own worker when both ship together.
+        navigateFallbackDenylist: [/^\/api\//, /^\/admin(\/|$)/],
         cleanupOutdatedCaches: true,
         clientsClaim: true,
         runtimeCaching: [
